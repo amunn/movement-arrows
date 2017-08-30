@@ -1,0 +1,108 @@
+\def\MVA@version{0.1}
+\ProvidesPackage{movement-arrows}[2017/07/17 v \MVA@version]
+\@ifpackageloaded{gb4e}{\noautomath}{}
+\RequirePackage{tikz}
+\RequirePackage{etoolbox}
+\RequirePackage{calc}
+\usetikzlibrary{calc}
+\newcommand\tikzmark[1]{\tikz[remember picture, baseline=(#1.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#1) {#1};}
+% This code adapted from http://tex.stackexchange.com/q/55068/2693
+% Two new styles added, one with a bar on the right, one with a bar on the left
+\tikzset{
+    arrow/.style={arrow dir=ncbar,->,shorten >=3pt,shorten <=3pt},
+    ncbar angle/.initial=90,
+    arrow dir/.initial=ncbar,
+    arrow dir/.expand once=\MVA@arrowdir,
+    ncbar/.style={% |_____| shape
+        to path=(\tikztostart)
+        -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
+        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
+        -- (\tikztotarget)
+    },
+    rbar/.style={% _____| shape
+        to path=(\tikztostart)
+        -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
+        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
+    },
+    lbar/.style={% |_____ shape
+        to path=
+          ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$) 
+        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
+        -- (\tikztotarget)
+    },
+    ncbar/.default=0.5cm,
+}
+\newlength{\arrowheight}
+\setlength{\arrowheight}{2.5ex}
+\newlength{\extraexheight}
+\setlength{\extraexheight}{.5ex}
+\newlength{\MVA@arrowht}
+\setlength{\MVA@arrowht}{\arrowheight}
+\newlength{\MVA@strutheight}
+\newcommand*\MVA@arrowstrut{%
+	\setlength{\MVA@strutheight}{\MVA@arrowht+\extraexheight}%
+	{\vrule height 0pt depth \MVA@strutheight width 0pt}}
+\let\arrowstrut\MVA@arrowstrut
+
+% Thanks to Paul Gessler and Percusse for code improvement here
+
+\newcommand{\arrow}[3][]{%
+\setlength{\MVA@arrowht}{\arrowheight}
+\def\rightanchor{base}\let\leftanchor\rightanchor
+%\if#1r\def\rightanchor{base}\def\leftanchor{base west}\fi
+%\if#1l\def\rightanchor{base east}\def\leftanchor{base}\fi
+\begin{tikzpicture}[remember picture,overlay]
+\tikzset{arrow options/.append style=#1}
+\draw[arrow options] (#2.\rightanchor) to [\MVA@arrowdir=\MVA@arrowht] (#3.\leftanchor);
+\end{tikzpicture}
+\MVA@arrowstrut
+\setlength{\MVA@arrowht}{0ex}
+}
+\AtBeginDocument{%
+\ifdefined\eachwordone\preto{\eachwordone}{\MVA@arrowstrut}\renewcommand\glt{\vskip -1.2\arrowheight}
+\let\trans=\glt
+\fi}
+
+
+
+
+\endinput
+\usepackage{gb4e}
+% The following code modified from 
+% http://permalink.gmane.org/gmane.comp.tex.linguistics/1036
+% This adds some extra space after the first line
+
+
+\renewcommand\eachwordone{\cgdepthstrut\rmfamily}
+\renewcommand\glt{\vskip -\topsep}
+\let\trans=\glt
+\newcommand\arrowex{\setlength{\arrowht}{2.5ex}\ex}
+
+
+\begin{document}
+\begin{exe}
+\ex\label{scramble-det}
+\begin{xlist}
+        \arrowex 
+        \gll 
+        \ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}  gekregen heeft.\\
+        \ldots that John a car  yesterday t gotten has \\
+        \ldots that John a car yesterday.
+        \arrow{t}{een}
+\end{xlist}
+\end{exe}
+
+\begin{exe}
+\arrowex{
+    \gll
+    \tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.    \\
+     John-Top very very very very {} stupid-cop \\
+     \arrow[l]{tondemonai}{John}
+     \arrow[r]{t}{sukuigatai}
+    \glt `John is very stupid.'   
+}
+
+
+\end{exe}
+
+\end{document}
