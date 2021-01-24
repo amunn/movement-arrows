@@ -12,7 +12,7 @@
     arrow/.style={arrow dir=ncbar,->,shorten >=3pt,shorten <=3pt},
     ncbar angle/.initial=90,
     arrow dir/.initial=ncbar,
-    arrow dir/.expand once=\MVA@arrowdir,
+    arrow dir/.store in=\MVA@arrowdir,
     ncbar/.style={% |_____| shape
         to path=(\tikztostart)
         -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
@@ -44,6 +44,10 @@
 	{\vrule height 0pt depth \MVA@strutheight width 0pt}}
 \let\arrowstrut\MVA@arrowstrut
 
+% To use arrows with plain (unglossed) examples, we need a different way
+% to introduce the \arrowex since it might have a grammaticality judgement
+% this will require some thinking for linguex and gb4e and expex separately
+
 % Thanks to Paul Gessler and Percusse for code improvement here
 
 \newcommand{\arrow}[3][]{%
@@ -74,6 +78,9 @@
 
 \endinput
 \usepackage{gb4e}
+
+
+
 % The following code modified from 
 % http://permalink.gmane.org/gmane.comp.tex.linguistics/1036
 % This adds some extra space after the first line
@@ -109,6 +116,43 @@
 }
 
 
+\end{exe}
+
+% This code a switch to apply to successive glossed elements
+% Answer to https://tex.stackexchange.com/q/433375/2693
+%
+% Should probably incorporate all this into a package of 'useful gloss stuff'
+%
+
+\usepackage{xcolor}
+\usepackage{gb4e}
+
+\makeatletter
+\newcommand*\glosscolor[1]{\gdef\@glcolor{#1}}
+\glosscolor{red}
+\AtBeginDocument{\colorlet{savedcol}{.}}
+\def\@glosscolor{savedcol}
+\newcommand{\clt}{\gdef\@glosscolor{\@glcolor}\color{\@glosscolor}}
+\newcommand{\clf}{\gdef\@glosscolor{savedcol}\color{\@glosscolor}}
+
+\gdef\getwords(#1,#2)#3 #4\\% #1=linebox, #2=\each, #3=1st word, #4=remainder
+   {\setbox#1=\vbox{\hbox{#2{\strut\color{\@glosscolor}#3} }% adds space
+                    \unvbox#1%
+                   }%
+    \def\more{#4}%
+    \ifx\more\empty\let\more=\donewords
+    \else\let\more=\getwords
+    \fi
+    \more(#1,#2)#4\\%
+   }
+\gdef\donewords(#1,#2)\\{\gdef\@glosscolor{.}}   
+\makeatother
+\begin{document}
+\begin{exe}
+\ex \glll
+    \clt a  b c d \clf e \clt f g\\
+    a  \clt b  c  d f \clf g\\
+    a \clt b c d \clf e f g\\
 \end{exe}
 
 \end{document}
