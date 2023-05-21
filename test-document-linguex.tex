@@ -2,33 +2,24 @@
 \usepackage[margin=2in]{geometry}
 \usepackage{linguex}
 \usepackage{movement-arrows}
+
 \begin{document}
 
 \ex. 
-\ag.\ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}  gekregen heeft.\\
-\ldots that John a car  yesterday t gotten has \\
+\ag.\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
 \ldots that John a car yesterday.
 \arrow{t}{een}
-\b. Another \tikzmark{example} with \tikzmark{movement}.
-\arrow{movement}{example}
+\addtolength{\extraexheight}{1ex}
+\b.  \mkword{Where} did this move from \mkword{t}?
+\arrow[circ=1]{t}{Where}
 \b. Another example.
 
 \ex.
-\a. This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-\b. This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-
-\ex. This is an example.
-
-\exg.
-\tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.\\
- John-Top very very very very {} stupid-cop \\
- `John is very stupid.'  
- \arrow[arrow dir=lbar]{tondemonai}{John}
- \arrow[arrow dir=rbar]{t}{sukuigatai}
- 
-
+\a. This \mkword{is} not \mkword[t]{<be>} verb movement.
+\arrow{t}{is}
+\b. It  \mkword{PRES} not \mkword[be]{be} verb lowering.
+\arrow[circ=2]{PRES}{be}
 
 
 

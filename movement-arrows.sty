@@ -1,41 +1,50 @@
-\def\MVA@version{0.1}
-\ProvidesPackage{movement-arrows}[2017/07/17 v \MVA@version]
+% movement-arrows
+% Draw movement arrows on example sentences including glossed sentences
+% Copyright 2023 by Alan Munn <amunn@msu.edu>
+% 
+%
+% This package may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This package has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this package is Alan Munn.
+%
+% This package consists of the file gb4e-emulate.sty
+%
+% Version 1.0 2023-05-21 Initial release
+%
+\def\MVA@version{1.0}
+\ProvidesPackage{movement-arrows}[2023/05/21 v \MVA@version]
 \@ifpackageloaded{gb4e}{\noautomath}{}
 \RequirePackage{tikz}
+\usetikzlibrary{ext.paths.ortho}
 \RequirePackage{etoolbox}
 \RequirePackage{calc}
-\usetikzlibrary{calc}
-\newcommand\tikzmark[1]{\tikz[remember picture, baseline=(#1.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#1) {#1};}
-% This code adapted from http://tex.stackexchange.com/q/55068/2693
-% Two new styles added, one with a bar on the right, one with a bar on the left
+\NewDocumentCommand{\mkword}{om}{%
+\IfNoValueTF{#1}
+{\tikz[remember picture, baseline=(#2.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#2) {#2};}
+{\tikz[remember picture, baseline=(#1.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#1) {#2};}
+}
 \tikzset{
-    arrow/.style={arrow dir=ncbar,->,shorten >=3pt,shorten <=3pt},
-    ncbar angle/.initial=90,
-    arrow dir/.initial=ncbar,
-    arrow dir/.expand once=\MVA@arrowdir,
-    ncbar/.style={% |_____| shape
-        to path=(\tikztostart)
-        -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
-        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
-        -- (\tikztotarget)
-    },
-    rbar/.style={% _____| shape
-        to path=(\tikztostart)
-        -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
-        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
-    },
-    lbar/.style={% |_____ shape
-        to path=
-          ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$) 
-        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
-        -- (\tikztotarget)
-    },
-    ncbar/.default=0.5cm,
+    arrow/.style={->,shorten >=3pt,shorten <=3pt},
+	circ/.style = {
+  		draw,circle,solid,
+  		node contents=#1,
+  		fill=white,
+  		inner xsep=.2em,
+  		inner ysep=0pt,
+}
 }
 \newlength{\arrowheight}
 \setlength{\arrowheight}{2.5ex}
 \newlength{\extraexheight}
-\setlength{\extraexheight}{.5ex}
+\setlength{\extraexheight}{1ex}
 \newlength{\MVA@arrowht}
 \setlength{\MVA@arrowht}{\arrowheight}
 \newlength{\MVA@strutheight}
@@ -44,71 +53,24 @@
 	{\vrule height 0pt depth \MVA@strutheight width 0pt}}
 \let\arrowstrut\MVA@arrowstrut
 
-% Thanks to Paul Gessler and Percusse for code improvement here
-
-\newcommand{\arrow}[3][]{%
+\NewDocumentCommand{\arrow}{omm}{
 \setlength{\MVA@arrowht}{\arrowheight}
-\def\rightanchor{base}\let\leftanchor\rightanchor
-%\if#1r\def\rightanchor{base}\def\leftanchor{base west}\fi
-%\if#1l\def\rightanchor{base east}\def\leftanchor{base}\fi
+\def\MVA@rightanchor{base}\let\MVA@leftanchor\MVA@rightanchor
+\IfNoValueTF{#1}
+{
 \begin{tikzpicture}[remember picture,overlay]
-\tikzset{arrow options/.append style=#1}
-\draw[arrow options] (#2.\rightanchor) to [\MVA@arrowdir=\MVA@arrowht] (#3.\leftanchor);
+\draw[arrow] (#2.\MVA@rightanchor) r-du[du distance=\arrowheight] (#3.\MVA@leftanchor);
 \end{tikzpicture}
+}
+{\begin{tikzpicture}[remember picture,overlay]
+\draw[arrow] (#2.\MVA@rightanchor)  r-du[du distance=\arrowheight] node[#1] {}  (#3.\MVA@leftanchor);
+\end{tikzpicture}}
 \MVA@arrowstrut
 \setlength{\MVA@arrowht}{0ex}
 }
+
 \AtBeginDocument{%
 \ifdefined\eachwordone\preto{\eachwordone}{\MVA@arrowstrut}\renewcommand\glt{\vskip -1.2\arrowheight}
 \let\trans=\glt
 \fi}
 
-% This code is useful for underlining stuff too add this
-%\newcommand*{\tkzuline}[3][]{\tikz[overlay,remember picture]{ \draw[#1] (#2.south) -- (#3.south);}}
-%\newcommand*{\UL}{\tkzmk{1}}
-%\newcommand*{\LU}{\tkzmk{2}}
-%\newcommand*{\gluline}[1][]{\tkzuline[#1]{1}{2}}
-
-
-
-
-\endinput
-\usepackage{gb4e}
-% The following code modified from 
-% http://permalink.gmane.org/gmane.comp.tex.linguistics/1036
-% This adds some extra space after the first line
-
-
-\renewcommand\eachwordone{\cgdepthstrut\rmfamily}
-\renewcommand\glt{\vskip -\topsep}
-\let\trans=\glt
-\newcommand\arrowex{\setlength{\arrowht}{2.5ex}\ex}
-
-
-\begin{document}
-\begin{exe}
-\ex\label{scramble-det}
-\begin{xlist}
-        \arrowex 
-        \gll 
-        \ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}  gekregen heeft.\\
-        \ldots that John a car  yesterday t gotten has \\
-        \ldots that John a car yesterday.
-        \arrow{t}{een}
-\end{xlist}
-\end{exe}
-
-\begin{exe}
-\arrowex{
-    \gll
-    \tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.    \\
-     John-Top very very very very {} stupid-cop \\
-     \arrow[l]{tondemonai}{John}
-     \arrow[r]{t}{sukuigatai}
-    \glt `John is very stupid.'   
-}
-
-
-\end{exe}
-
-\end{document}

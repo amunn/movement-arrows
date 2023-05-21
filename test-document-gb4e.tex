@@ -4,35 +4,26 @@
 \usepackage{movement-arrows}
 \begin{document}
 \begin{exe}
-\ex\label{scramble-det}
+\ex
 \begin{xlist}
-        \ex 
-        \gll 
-        \ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}  gekregen heeft. This is some more lines \\
-        \ldots that John a car  yesterday t gotten has this is some more lines \\
-        \ldots that John a car yesterday.
-        \arrow{t}{een}
-        \ex Another \tikzmark{example} with \tikzmark{movement}.
-        \arrow{movement}{example}
-        \ex Another example.
+\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
+\ldots that John a car yesterday.}
+\arrow{t}{een}
+\addtolength{\extraexheight}{1ex}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\arrow[circ=1]{t}{Where}
+\ex Another example.
 \end{xlist}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
 \end{exe}
 
 \begin{exe}
-\ex{
-    \gll%
-    \tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.    \\
-     John-Top very very very very {} stupid-cop \\
-     \arrow[arrow dir=lbar]{tondemonai}{John}
-     \arrow[arrow dir=rbar]{t}{sukuigatai}
-     \glt `John is very stupid.' 
-}
-
-
+\ex
+\begin{xlist}
+\ex This \mkword{is} not \mkword[t]{<be>} verb movement.
+\arrow{t}{is}
+\ex It  \mkword{PRES} not \mkword[be]{be} verb lowering.
+\arrow[circ=2]{PRES}{be}
+\end{xlist}
 \end{exe}
-
 \end{document}

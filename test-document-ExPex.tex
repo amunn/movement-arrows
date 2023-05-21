@@ -1,16 +1,15 @@
 \documentclass{article}
-
+\usepackage[margin=1in]{geometry}
 \usepackage{expex}
 \usepackage{movement-arrows}
-\makeatletter\let\arrowstrut\MVA@arrowstrut\makeatother
 
 \begin{document}
 
 \pex
 \a
-\begingl[aboveglbskip=\arrowheight]
-\gla        \ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}   gekregen heeft. This is some more  text as a test//
-\glb        \ldots that John a car  yesterday t  gotten has this is some more text as a test //
+\begingl[aboveglbskip=1.2\arrowheight]
+\gla        \ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}   gekregen heeft. This is some more  text as a test//
+\glb        \ldots that John {a\hspace*{1em} car}  yesterday t  gotten has this is some more text as a test //
 \glft       \ldots that John a car yesterday.//
 \endgl
 \a\begingl
@@ -19,36 +18,6 @@
 \glft       \ldots that John a car yesterday.//
 \endgl
 \xe
-\end{document}
-        \ex Another \tikzmark{example} with \tikzmark{movement}.
-        \arrow{movement}{example}
-        \ex Another example.
-\end{xlist}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-\end{exe}
-
-\begin{exe}
-\ex{
-    \gll%
-    \tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.    \\
-     John-Top very very very very {} stupid-cop \\
-     \arrow[l]{tondemonai}{John}
-     \arrow[r]{t}{sukuigatai}
-     \glt `John is very stupid.' 
-}
-
-
-\end{exe}
-
-\ex
-\begingl
-\gla \tikzmark{1}Si fuera\tikzmark{2} m\'as alto ser\'ia \tikzmark{4}un jugador\tikzmark{5} de baloncesto.//
-\glb If be.3.sg.PAST.SUBJ\tikzmark{3} more tall be.3.sg.COND a player\tikzmark{6} of basketball//
-\glft `If s/he was taller, s/he would be a basketball player’//
-\endgl
-\xe
+\arrow[circ=1]{t}{een}
 
 \end{document}

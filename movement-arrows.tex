@@ -1,0 +1,226 @@
+\documentclass[11pt]{article} 
+\usepackage{calc}
+\usepackage{fontspec}
+\usepackage[lmargin=.75in,rmargin=.75in,tmargin=1in,bmargin=1in]{geometry}
+\usepackage{titling}
+\usepackage{array, booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{url}
+\usepackage[sf,small]{titlesec}
+\usepackage[section]{placeins}
+\usepackage[colorlinks=true]{hyperref}
+\setmonofont{Inconsolatazi4}
+\usepackage{gb4e}
+\usepackage{movement-arrows}
+\usepackage{parskip}
+
+\DefineShortVerb{\|}
+\title{The \texttt{movement-arrows} package}
+\author{Alan Munn\\amunn@msu.edu}
+\date{Version 1.0\\May 21, 2023}
+  
+\lstset{%
+    basicstyle=\ttfamily\small,
+    commentstyle=\itshape\ttfamily\small,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakautoindent=true,
+    aboveskip=\baselineskip,
+    language=TeX,
+    frame=single
+    captionpos=t
+    }
+  
+\newcommand*{\pkg}[1]{\texttt{#1}}
+\newcolumntype{t}[1]{>{\ttfamily}#1}
+\newcolumntype{T}{>{\ttfamily}c}
+\newcommand*{\bs}{\textbackslash}
+\setlength{\droptitle}{-1in}
+\renewcommand{\abstractname}{\sffamily Abstract}
+
+
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\begin{abstract}{\noindent
+The |movement-arrows| package supplies simple support for drawing movement arrows on example sentences. It automatically adjusts spacing between examples or gloss lines to make room for the arrows.  Arrows can also be annotated with labels.  The package uses TikZ as a base, and various properties of the arrows can be adjusted using TikZ styles. The package has been tested with the \pkg{gb4e}, \pkg{linguex}, and \pkg{ExPex} example packages.
+
+
+}
+\end{abstract}
+\section{Package commands}
+\begin{table}[htpb]
+\centering
+\begin{tabularx}{.9\textwidth}{t{l}X}
+\toprule
+\bs markwd[<name>]{<word>} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
+\bs arrow[<options>]{<start>}{<end>} & add an arrow between start and end nodes defined with \pkg{\bs markwd}\\
+\bs arrowheight & length for the depth that the vertical line of the arrow drops\\
+\bs extraexheight & length to add more space after a line with an arrow\\
+\bottomrule
+\end{tabularx}
+\caption{Package commands}
+\end{table}
+\section{Basic usage}
+The way the package works is that you mark words in your example sentence using the |\mkword| macro and then use the |\arrow| macro to connect the words. So with the following code (using \pkg{gb4e} as our example package), we can get the result in (\ref{where}).  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
+
+
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\arrow{t}{Where}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\arrow{t}{Where}
+\label{where}
+\end{exe}
+
+This is the simplest use of the |\mkword| macro: it automatically creates a node with the same name as the word.  This only works, however, if the word is a single word with no other formatting. 
+
+For example, if instead of representing traces with \emph{t} we use copies or a subscripted trace, we need to explicitly state the node name in the optional argument of |\mkword|.  Here’s a revised example:
+\clearpage
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\ex  \mkword[Where]{Where\textsubscript{i}} did 
+this move from \mkword[t]{t\textsubscript{i}}?
+\arrow{t}{Where}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\ex  \mkword[Where]{Where\textsubscript{i}} did this move from \mkword[t]{t\textsubscript{i}}?
+\arrow{t}{Where}
+\label{where2}
+\end{exe}
+\subsection{Adding labels}
+The optional argument can be used to add a label to an arrow.  There is one built-in label style called |circ|. Other styles can be created by the user if needed.  The |circ| style is defined as follows:
+
+\begin{quote}
+\begin{lstlisting}
+\tikzset{
+	circ/.style = {
+  		draw,circle,solid,
+  		node contents=#1,
+  		fill=white,
+  		inner xsep=.2em,
+  		inner ysep=0pt,
+}}
+\end{lstlisting}
+\end{quote}
+
+So to add a circled number “1” to the previous example we add |circ=1|:
+
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\ex  \mkword[Where]{Where\textsubscript{i}} did 
+this move from \mkword[t]{t\textsubscript{i}}?
+\arrow[circ=1]{t}{Where}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\ex  \mkword[Where]{Where\textsubscript{i}} did 
+this move from \mkword[t]{t\textsubscript{i}}?
+\arrow[circ=1]{t}{Where}
+\end{exe}
+\subsection{Glossed examples}
+The package automatically adjusts the vertical spacing between gloss elements and the first line to accommodate the arrows. Here’s a glossed example. In this example, because we want the arrow to point in the middle of \emph{een auto}, since it’s a phrase that has moved, we need to manually adjust the spacing between \emph{a} and \emph{car} in the gloss line. Alternatively we could just use either \emph{een} or \emph{auto} as the marked node and then no adjustment would be needed. This code also makes use of the |\extraexheight| length to increase the spacing after the second arrow in the example set.
+\clearpage
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\ex
+\begin{xlist}
+\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
+\ldots that John a car yesterday.}
+\arrow{t}{een}
+\addtolength{\extraexheight}{1ex}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\arrow[circ=1]{t}{Where}
+\ex Another example.
+\end{xlist}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\ex
+\begin{xlist}
+\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
+\ldots that John a car yesterday.}
+\arrow{t}{een}
+\addtolength{\extraexheight}{1ex}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\arrow[circ=1]{t}{Where}
+\ex Another example.
+\end{xlist}
+\end{exe}
+\subsection{Adding colour or changing the line style}
+The package uses TikZ styles to style the arrow and the label. The label style |circ| can be modified by using adding parameters directly.  The arrow style can be modified by using |\tikzset{arrow/.append style={...}|.  Here is some examples of both usages.
+
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\tikzset{arrow/.append style={{red,dashed,very thick}}}
+\ex  \mkword[Where]{Where\textsubscript{i}} did 
+this move from \mkword[t]{t\textsubscript{i}}?
+\arrow[black,circ=1]{t}{Where}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+
+\begin{exe}
+\tikzset{arrow/.append style={{red,dashed,very thick}}}
+\ex  \mkword[Where]{Where\textsubscript{i}} did 
+this move from \mkword[t]{t\textsubscript{i}}?
+\arrow[black,circ=1,thin]{t}{Where}
+\end{exe}
+
+\subsection{Multiple arrows on one example}
+If we want to have more than arrow on a single example, it may make sense to have them offset from one another. The position of the labels may also need to be manually adjusted. This is quite easy to do. The length of the vertical line in the arrow is set by the length |\arrowheight|. The position of the label can be moved by adding a |xshift| value. Here’s an example:
+\clearpage
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved?
+\arrow[circ=1,xshift=1em]{thas}{has}
+\setlength{\arrowheight}{4.5ex}
+\arrow[circ=2]{twh}{What}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved?
+\arrow[circ=1,xshift=1em]{thas}{has}
+\setlength{\arrowheight}{4.5ex}
+\arrow[circ=2]{twh}{What}
+\end{exe}
+
+For examples like this, some manual vertical spacing may be needed to prevent subsequent lines of text from overlapping the arrow.
+
+\section{Version history}
+The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified. Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
+\section{Acknowledgements}
+Thanks to the TeX Stackexchange community, from whom I have learned many things, especially about TikZ. The earliest version of the package used code created by user Jake in response to \href{https://tex.stackexchange.com/q/55068/}{a question} I asked. This has now be superseded by the |paths.ortho| methods, but the style described there is quite useful in and of itself. I’ve also benefitted from discussions and suggestions with user percusse. 
+
+
+
+
+\end{document}
