@@ -38,7 +38,7 @@
   		node contents=#1,
   		fill=white,
   		inner xsep=.2em,
-  		inner ysep=0pt,
+  		inner ysep=0pt
 }
 }
 \newlength{\arrowheight}
@@ -53,17 +53,20 @@
 	{\vrule height 0pt depth \MVA@strutheight width 0pt}}
 \let\arrowstrut\MVA@arrowstrut
 
-\NewDocumentCommand{\arrow}{omm}{
-\setlength{\MVA@arrowht}{\arrowheight}
-\def\MVA@rightanchor{base}\let\MVA@leftanchor\MVA@rightanchor
-\IfNoValueTF{#1}
+\NewDocumentCommand{\arrow}{somm}{
+\IfBooleanTF{#1}
+{\setlength{\MVA@arrowht}{-\arrowheight}
+\def\MVA@rightanchor{north}\let\MVA@leftanchor\MVA@rightanchor}
+{\setlength{\MVA@arrowht}{\arrowheight}
+\def\MVA@rightanchor{base}\let\MVA@leftanchor\MVA@rightanchor}
+\IfNoValueTF{#2}
 {
 \begin{tikzpicture}[remember picture,overlay]
-\draw[arrow] (#2.\MVA@rightanchor) r-du[du distance=\arrowheight] (#3.\MVA@leftanchor);
+\draw[arrow] (#3.\MVA@rightanchor) r-du[du distance=\MVA@arrowht] (#4.\MVA@leftanchor);
 \end{tikzpicture}
 }
 {\begin{tikzpicture}[remember picture,overlay]
-\draw[arrow] (#2.\MVA@rightanchor)  r-du[du distance=\arrowheight] node[#1] {}  (#3.\MVA@leftanchor);
+\draw[arrow] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
 \end{tikzpicture}}
 \MVA@arrowstrut
 \setlength{\MVA@arrowht}{0ex}

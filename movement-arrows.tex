@@ -58,7 +58,7 @@ The |movement-arrows| package supplies simple support for drawing movement arrow
 \begin{tabularx}{.9\textwidth}{t{l}X}
 \toprule
 \bs markwd[<name>]\{<word>\} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
-\bs arrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs markwd}\\
+\bs arrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs markwd}. \bs arrow* draws an arrow above the words.\\
 \bs arrowheight & length for the depth that the vertical line of the arrow drops\\
 \bs extraexheight & length to add more space after a line with an arrow\\
 \bottomrule
@@ -214,6 +214,29 @@ If we want to have more than arrow on a single example, it may make sense to hav
 \end{exe}
 
 For examples like this, some manual vertical spacing may be needed to prevent subsequent lines of text from overlapping the arrow.
+
+\subsection{Arrows on top of words}
+The starred version of |\arrow|, |\arrow*| will draw the arrow above the words rather than the default position below the words. At the moment, no automatic spacing is done for arrows above, which means you will need to add vertical space yourself. I may consider adding automatic spacing here too, but at the moment this is not a priority, especially since at least in \pkg{gb4e} the |\sn| version of |\ex| will produce a blank line very simply.  Here’s the previous example using a combination of over- and under-arrows:
+
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\sn
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? 
+\arrow[circ=1,xshift=1em]{thas}{has} 
+\arrow*[circ=2]{twh}{What}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\sn
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? \arrow[circ=1,xshift=1em]{thas}{has} \arrow*[circ=2]{twh}{What}
+\end{exe}
+
+
 
 \section{Version history}
 The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified. Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
