@@ -58,7 +58,7 @@ The |movement-arrows| package supplies simple support for drawing movement arrow
 \begin{tabularx}{.9\textwidth}{t{l}X}
 \toprule
 \bs markwd[<name>]\{<word>\} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
-\bs arrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs markwd}. \bs arrow* draws an arrow above the words.\\
+\bs arrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs markwd}. \pkg{\bs arrow*} draws an arrow above the words.\\
 \bs arrowheight & length for the depth that the vertical line of the arrow drops\\
 \bs extraexheight & length to add more space after a line with an arrow\\
 \bottomrule
@@ -179,7 +179,7 @@ The package uses TikZ styles to style the arrow and the label. The label style |
 \tikzset{arrow/.append style={{red,dashed,very thick}}}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[black,circ=1]{t}{Where}
+\arrow[cyan,circ=1]{t}{Where}
 \end{exe}
 \end{lstlisting}
 \end{quote}
@@ -189,7 +189,7 @@ this move from \mkword[t]{t\textsubscript{i}}?
 \tikzset{arrow/.append style={{red,dashed,very thick}}}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[black,circ=1,thin]{t}{Where}
+\arrow[cyan,circ=1,thin]{t}{Where}
 \end{exe}
 
 \subsection{Multiple arrows on one example}
@@ -224,7 +224,7 @@ The starred version of |\arrow|, |\arrow*| will draw the arrow above the words r
 \sn
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
 moved? 
-\arrow[circ=1,xshift=1em]{thas}{has} 
+\arrow[circ=1]{thas}{has} 
 \arrow*[circ=2]{twh}{What}
 \end{exe}
 \end{lstlisting}
@@ -233,7 +233,7 @@ moved?
 \begin{exe}
 \sn
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
-moved? \arrow[circ=1,xshift=1em]{thas}{has} \arrow*[circ=2]{twh}{What}
+moved? \arrow[circ=1]{thas}{has} \arrow*[circ=2]{twh}{What}
 \end{exe}
 
 
