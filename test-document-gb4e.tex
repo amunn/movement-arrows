@@ -1,17 +1,21 @@
-\documentclass[11pt]{article}
+% !TEX TS-program = pdfLaTeX
 
+\documentclass{article}
+\usepackage[margin=2in]{geometry}
+\usepackage[T1]{fontenc}
 \usepackage{gb4e}
 \usepackage{movement-arrows}
 \begin{document}
+\section*{\texttt{gb4e} test document}
 \begin{exe}
 \ex
 \begin{xlist}
 \ex{\arrowgloss\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
 \ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
 \glt that John a car yesterday.}
-\arrow{t}{een}
+\mvarrow{t}{een}
 \ex  \mkword{Where} did this move from \mkword{t}?
-\arrow[circ=1]{t}{Where}
+\mvarrow[circ=1]{t}{Where}
 \ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
 \ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
 \glt that John a car yesterday.}
@@ -23,9 +27,9 @@
 \ex
 \begin{xlist}
 \ex This \mkword{is} not \mkword[t]{<be>} verb movement.
-\arrow{t}{is}
+\mvarrow{t}{is}
 \ex It  \mkword{PRES} not \mkword[be]{be} verb lowering.
-\arrow[circ=2]{PRES}{be}
+\mvarrow[circ=2]{PRES}{be}
 \ex Another example.
 \end{xlist}
 \end{exe}
@@ -35,9 +39,10 @@
 \begin{xlist}
 \arrowstrut
 \ex\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved? 
-\arrow*[circ=2]{twh}{What}
-\arrow[circ=1]{thas}{has} 
-\ex\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved? \arrow[circ=1]{thas}{has} \arrow*[circ=2]{twh}{What}
+\mvarrow*[circ=2]{twh}{What}
+\mvarrow[circ=1]{thas}{has} 
+\ex\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved? \mvarrow[circ=1]{thas}{has} 
+\mvarrow*[circ=2]{twh}{What}
 \end{xlist}
 \end{exe}
 

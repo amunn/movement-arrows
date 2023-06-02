@@ -162,6 +162,8 @@ this move from \mkword[t]{t\textsubscript{i}}?
 \subsection{Glossed linguistic examples}
 Because of the way glossing macros work, arrows that are used in glossed examples using any of the standard linguistic glossing packages must be specially marked. We do this using the |\arrowgloss| command. This should appear before the glossed example that contains the arrow.  Here’s a glossed example. In this example, because we want the arrow to point in the middle of \emph{een auto}, since it’s a phrase that has moved, we need to manually adjust the spacing between \emph{a} and \emph{car} in the gloss line. Alternatively we could just use either \emph{een} or \emph{auto} as the marked node and then no adjustment would be needed. 
 
+For sample documents using each of the four linguistics example packages, please visit the   \href{https://github.com/amunn/movement-arrows/}{GitHub repository}.
+
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
@@ -279,6 +281,19 @@ The ExPex glossing macros work differently from \pkg{gb4e}, \pkg{linguex}, and \
 \end{quote}
 
 There are two important things to note here. First, in the gloss that contains the arrow you need to set  |aboveglbskip=\glarrowheight| to leave enough room for the arrow. Secondly, the |\mvarrow| command itself should appear \emph{inside} the |\glft| line rather than outside of that line, i.e., it should appear before the |//| delimiter of the line.
+\subsection{Using with \pkg{covington}}
+When using the package with the \pkg{covington} glossing macros, you need to make sure that the |\mvarrow| command is \emph{inside} the last line of gloss set:
+
+\begin{quote}
+\begin{lstlisting}
+\begin{subexamples}
+	\item\arrowgloss\digloss
+	    {\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.}
+	    {\ldots that John {a \hspace*{1em} car}  yesterday t gotten has}
+	    {\ldots that John a car yesterday.\mvarrow{t}{een}}	    
+\end{subexamples}
+\end{lstlisting}
+\end{quote}
 
 \section{Links without arrows}
 All of the |\mvarrow| commands have an alternative version |\mvlink| which simply links the words with no arrows. 
@@ -306,7 +321,7 @@ moved?
 
 
 \section{Version history}
-The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified. Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}. Version 2.0 changed the basic command name from |\arrow| to |\mvarrow| to avoid conflicts with other packages that define an |\arrow| command, and added the |\arrowgloss| and |\arrowstrut| macros for better spacing options. 
+The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified and allowed version 1.0 to be released in May 2023, a little too fast. Version 2.0 changed the basic command name from |\arrow| to |\mvarrow| to avoid conflicts with other packages that define an |\arrow| command, and added the |\arrowgloss| and |\arrowstrut| macros for better spacing options.  Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
 \section{Acknowledgements}
 Thanks to the TeX Stackexchange community, from whom I have learned many things, especially about TikZ. The earliest version of the package used code created by user Jake in response to \href{https://tex.stackexchange.com/q/55068/}{a question} I asked. This has now be superseded by the |paths.ortho| methods, but the style described there is quite useful in and of itself. I’ve also benefitted from discussions and suggestions with user percusse. 
 
