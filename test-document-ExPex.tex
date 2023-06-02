@@ -6,18 +6,43 @@
 \begin{document}
 
 \pex
-\a
-\begingl[aboveglbskip=1.2\arrowheight]
-\gla        \ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}   gekregen heeft. This is some more  text as a test//
-\glb        \ldots that John {a\hspace*{1em} car}  yesterday t  gotten has this is some more text as a test //
-\glft       \ldots that John a car yesterday.//
+\a\arrowgloss
+\begingl[aboveglbskip=\glarrowheight]
+\gla        \ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}   gekregen heeft.//
+\glb        \ldots that John {a\hspace*{1em} car}  yesterday t  gotten has//
+\glft       \ldots that John got a car yesterday.
+\mvarrow[circ=1]{t}{een}// 
 \endgl
+
+\a Another example.
 \a\begingl
-\gla        \ldots dat Jan een auto gisteren t gekregen heeft. This is some more text as a test //
-\glb        \ldots that John a car  yesterday t gotten has this is some more text as a test //
-\glft       \ldots that John a car yesterday.//
+\gla        \ldots dat Jan een auto gisteren t gekregen heeft.  //
+\glb        \ldots that John a car  yesterday t gotten has  //
+\glft       \ldots that John got a car yesterday.//
 \endgl
+\a Another example.
 \xe
-\arrow[circ=1]{t}{een}
+%
+\pex
+\a This is an example.
+\a This is another example.
+\xe
+
+
+\pex
+\a This \mkword{is} not \mkword[t]{<be>} verb movement.
+\mvarrow{t}{is}
+\a It  \mkword{PRES} not \mkword[be]{be} verb lowering.
+\mvarrow[circ=2]{PRES}{be}
+\xe
+This is some text.
+\arrowstrut
+\pex
+\a\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? 
+\mvarrow[circ=1]{thas}{has} \mvarrow*[circ=2]{twh}{What}
+\a\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? \mvarrow[circ=1]{thas}{has} \mvarrow*[circ=2]{twh}{What}
+\xe
 
 \end{document}

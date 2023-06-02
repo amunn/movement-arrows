@@ -17,62 +17,106 @@
 %%
 % Version 1.0 2023-05-21 Initial release
 % Version 1.0b 2023-05-22 Fixed documentation typo
+% Version 2.0 2023-06-01 added \arrowgloss to fix strut problem
+%						 made package more general, added \mvlink command, new styles
+%					     renamed arrow command to be \mvarrow
 %
-\def\MVA@version{1.0b}
-\ProvidesPackage{movement-arrows}[2023/05/22 v \MVA@version]
+%
+%
+\def\MVA@version{2.0}
+\ProvidesPackage{movement-arrows}[2023/06/02 v \MVA@version]
 \@ifpackageloaded{gb4e}{\noautomath}{}
 \RequirePackage{tikz}
 \usetikzlibrary{ext.paths.ortho}
 \RequirePackage{etoolbox}
 \RequirePackage{calc}
+\newif\ifMVA@mmode
 \NewDocumentCommand{\mkword}{om}{%
+\ifmmode\MVA@mmodetrue\else\MVA@mmodefalse\fi
 \IfNoValueTF{#1}
-{\tikz[remember picture, baseline=(#2.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#2) {#2};}
-{\tikz[remember picture, baseline=(#1.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#1) {#2};}
+{\tikz[remember picture, baseline=(#2.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#2) {\ifMVA@mmode\ensuremath{#2}\else#2\fi};}
+{\tikz[remember picture, baseline=(#1.base)] \node[anchor=base,inner sep=0pt, outer sep=0pt] (#1) {\ifMVA@mmode\ensuremath{#2}\else#2\fi};}
 }
 \tikzset{
-    arrow/.style={->,shorten >=3pt,shorten <=3pt},
 	circ/.style = {
   		draw,circle,solid,
   		node contents=#1,
   		fill=white,
   		inner xsep=.2em,
   		inner ysep=0pt
-}
+},
+    link/.style={#1,shorten >=3pt,shorten <=3pt},
+    above/.style = {label=above:#1},
+    below/.style = {label=below:#1}
 }
 \newlength{\arrowheight}
+\newlength{\MVA@arrowstrutheight}
+\setlength{\MVA@arrowstrutheight}{3ex}
 \setlength{\arrowheight}{2.5ex}
 \newlength{\extraexheight}
-\setlength{\extraexheight}{1ex}
+\setlength{\extraexheight}{1.5ex}
+\newlength{\glarrowheight}
+\setlength{\glarrowheight}{\arrowheight+\extraexheight}
 \newlength{\MVA@arrowht}
-\setlength{\MVA@arrowht}{\arrowheight}
+\newlength{\MVA@extraht}
+\setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
+\newcommand*\MVA@arrowstyle{->}
+\newcommand*\setarrowstyle[1]{\gdef\MVA@arrowstyle{#1}}
+\newif\ifMVA@arrowgloss
 \newlength{\MVA@strutheight}
 \newcommand*\MVA@arrowstrut{%
-	\setlength{\MVA@strutheight}{\MVA@arrowht+\extraexheight}%
+	\setlength{\MVA@strutheight}{\MVA@arrowht+\MVA@extraht}%
 	{\vrule height 0pt depth \MVA@strutheight width 0pt}}
-\let\arrowstrut\MVA@arrowstrut
 
-\NewDocumentCommand{\arrow}{somm}{
-\IfBooleanTF{#1}
+\newcommand*\arrowgloss{\setlength{\MVA@arrowht}{\arrowheight}\setlength{\MVA@extraht}{\extraexheight}\global\MVA@arrowglosstrue}
+\newcommand*\arrowstrut{\vspace*{\MVA@arrowstrutheight}}
+
+\NewDocumentCommand{\mvarrow}{somm}{%
+\ifMVA@arrowgloss\else\arrowstrut\fi
+\IfBooleanTF{#1}%
 {\setlength{\MVA@arrowht}{-\arrowheight}
+ \setlength{\MVA@extraht}{-\extraexheight}
 \def\MVA@rightanchor{north}\let\MVA@leftanchor\MVA@rightanchor}
 {\setlength{\MVA@arrowht}{\arrowheight}
+\setlength{\MVA@extraht}{\extraexheight}
 \def\MVA@rightanchor{base}\let\MVA@leftanchor\MVA@rightanchor}
 \IfNoValueTF{#2}
-{
+{%
 \begin{tikzpicture}[remember picture,overlay]
-\draw[arrow] (#3.\MVA@rightanchor) r-du[du distance=\MVA@arrowht] (#4.\MVA@leftanchor);
+\draw[link=\MVA@arrowstyle] (#3.\MVA@rightanchor) r-du[du distance=\MVA@arrowht] (#4.\MVA@leftanchor);
 \end{tikzpicture}
 }
 {\begin{tikzpicture}[remember picture,overlay]
-\draw[arrow] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\draw[link=\MVA@arrowstyle] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
 \end{tikzpicture}}
-\MVA@arrowstrut
+\global\MVA@arrowglossfalse%
 \setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
 }
-
+\NewDocumentCommand{\mvlink}{somm}{%
+\ifMVA@arrowgloss\else\arrowstrut\fi
+\IfBooleanTF{#1}%
+{\setlength{\MVA@arrowht}{-\arrowheight}
+ \setlength{\MVA@extraht}{-\extraexheight}
+\def\MVA@rightanchor{north}\let\MVA@leftanchor\MVA@rightanchor}
+{\setlength{\MVA@arrowht}{\arrowheight}
+\setlength{\MVA@extraht}{\extraexheight}
+\def\MVA@rightanchor{base}\let\MVA@leftanchor\MVA@rightanchor}
+\IfNoValueTF{#2}
+{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[link] (#3.\MVA@rightanchor) r-du[du distance=\MVA@arrowht] (#4.\MVA@leftanchor);
+\end{tikzpicture}
+}
+{\begin{tikzpicture}[remember picture,overlay]
+\draw[link] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\end{tikzpicture}}
+\global\MVA@arrowglossfalse%
+\setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
+}
 \AtBeginDocument{%
-\ifdefined\eachwordone\preto{\eachwordone}{\MVA@arrowstrut}\renewcommand\glt{\vskip -1.2\arrowheight}
-\let\trans=\glt
+\ifdefined\eachwordone\preto{\eachwordone}{\MVA@arrowstrut}
 \fi}
 

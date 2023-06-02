@@ -1,7 +1,9 @@
+% !TEX TS-program = LuaLaTeXmk
+
 \documentclass[11pt]{article} 
 \usepackage{calc}
 \usepackage{fontspec}
-\usepackage[lmargin=.75in,rmargin=.75in,tmargin=1in,bmargin=1in]{geometry}
+\usepackage[margin=.75in]{geometry}
 \usepackage{titling}
 \usepackage{array, booktabs,tabularx}
 \usepackage{enumitem}
@@ -19,7 +21,7 @@
 \DefineShortVerb{\|}
 \title{The \texttt{movement-arrows} package}
 \author{Alan Munn\\amunn@msu.edu}
-\date{Version 1.0b\\May 22, 2023}
+\date{Version 2.0\\June 2, 2023}
   
 \lstset{%
     basicstyle=\ttfamily\small,
@@ -30,8 +32,7 @@
     breakautoindent=true,
     aboveskip=\baselineskip,
     language=TeX,
-    frame=single
-    captionpos=t
+    frame=tl,
     }
   
 \newcommand*{\pkg}[1]{\texttt{#1}}
@@ -47,64 +48,81 @@
 \maketitle
 \thispagestyle{empty}
 \begin{abstract}{\noindent
-The |movement-arrows| package supplies simple support for drawing movement arrows on example sentences. It automatically adjusts spacing between examples or gloss lines to make room for the arrows.  Arrows can also be annotated with labels.  The package uses TikZ as a base, and various properties of the arrows can be adjusted using TikZ styles. The package has been tested with the \pkg{gb4e}, \pkg{linguex}, and \pkg{ExPex} example packages.
-
-
+The |movement-arrows| package supplies simple support for drawing  arrows between elements in text or math. Its origin comes from linguistics, where drawing arrows between words is often used as an indication that the word or phrase has moved, hence the package name.  Because of this origin, the package is aware of the main linguistics packages for example sentences and can be used with those packages, but does not require you to use of any of them.  Arrows can also be annotated with labels.  The package uses TikZ as a base, and various properties of the arrows can be adjusted using TikZ styles. The package has been tested with the \pkg{gb4e}, \pkg{linguex}, \pkg{covington} and \pkg{ExPex} example packages.
 }
 \end{abstract}
+
+\section{Basic usage}
+The way the package works is that you mark words in text using the |\mkword| macro and then use the |\mvarrow| or |\mvlink| macro to connect the words.  Here's a simple example:
+
+\begin{quote}
+\begin{lstlisting}
+\documentclass{article}
+\usepackage{movement-arrows}
+\mkword{Where} did this move from \mkword{t}?
+\mvarrow{t}{Where}
+\end{lstlisting}
+\mkword{Where} did this move from \mkword{t}?
+\mvarrow{t}{Where}
+\end{quote}
+
 \section{Package commands}
 \begin{table}[htpb]
 \centering
-\begin{tabularx}{.9\textwidth}{t{l}X}
+\begin{tabularx}{\textwidth}{t{l}X}
 \toprule
 \bs mkword[<name>]\{<word>\} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
-\bs arrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs mkword}. \pkg{\bs arrow*} draws an arrow above the words.\\
-\bs arrowheight & length for the depth that the vertical line of the arrow drops\\
-\bs extraexheight & length to add more space after a line with an arrow\\
+\bs mvarrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs mkword}. \pkg{\bs mvarrow*} draws an arrow above the words.\\
+\bs mvlink[<options>]\{<start>\}\{<end>\} & add a link (no arrows) between start and end nodes. \pkg{\bs mvlink*} draws an link above the words. \\
+\bs setarrowstyle\{<style>\} & sets the arrow style; any regular TikZ arrow can be used.\\
+\bs arrowheight & length for the depth that the vertical line of the arrow drops/raises.\\
+\bs extraexheight & length to add more space after a line with an arrow.\\
+\bs glarrowheight & length = sum of previous two lenghts\\
+\bs arrowstrut & adds vertical space so that upwards links don't encroach on the previous line.\\
+\bs arrowgloss & tells the package that an arrow appears in a glossed example.\\
 \bottomrule
 \end{tabularx}
 \caption{Package commands}
 \end{table}
-\section{Basic usage}
-The way the package works is that you mark words in your example sentence using the |\mkword| macro and then use the |\arrow| macro to connect the words. So with the following code (using \pkg{gb4e} as our example package), we can get the result in (\ref{where}).  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
+\section{More examples}
+The way the package works is that you mark words in your example sentence using the |\mkword| macro and then use the |\mvarrow| macro to connect the words. So with the following code (using \pkg{gb4e} as our example package), we can get the result in (\ref{where}).  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
 
 
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
 \ex  \mkword{Where} did this move from \mkword{t}?
-\arrow{t}{Where}
+\mvarrow{t}{Where}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 \begin{exe}
 \ex  \mkword{Where} did this move from \mkword{t}?
-\arrow{t}{Where}
+\mvarrow{t}{Where}
 \label{where}
 \end{exe}
 
 This is the simplest use of the |\mkword| macro: it automatically creates a node with the same name as the word.  This only works, however, if the word is a single word with no other formatting. 
 
 For example, if instead of representing traces with \emph{t} we use copies or a subscripted trace, we need to explicitly state the node name in the optional argument of |\mkword|.  Here’s a revised example:
-\clearpage
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow{t}{Where}
+\mvarrow{t}{Where}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 \begin{exe}
 \ex  \mkword[Where]{Where\textsubscript{i}} did this move from \mkword[t]{t\textsubscript{i}}?
-\arrow{t}{Where}
+\mvarrow{t}{Where}
 \label{where2}
 \end{exe}
 \subsection{Adding labels}
-The optional argument can be used to add a label to an arrow.  There is one built-in label style called |circ|. Other styles can be created by the user if needed.  The |circ| style is defined as follows:
+The optional argument can be used to add a label to an arrow.  There are three built-in label styles:  |circ| produces a circled label centred on the line itself. |above| and |below| place an uncircled label above or below the line respectively. Other styles can be created by the user if needed.  The |circ| style is defined as follows:
 
 \begin{quote}
 \begin{lstlisting}
@@ -119,38 +137,43 @@ The optional argument can be used to add a label to an arrow.  There is one buil
 \end{lstlisting}
 \end{quote}
 
-So to add a circled number “1” to the previous example we add |circ=1|:
+So to add a circled number “1” to the previous example we add |circ=1|. To add an uncircled label above the arrow we can use |above=1|.
 
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[circ=1]{t}{Where}
+\mvarrow[circ=1]{t}{Where}
+\mvarrow*[above=1]{t}{Where}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 \begin{exe}
+\arrowstrut
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[circ=1]{t}{Where}
+\mvarrow[circ=1]{t}{Where}
+\mvarrow*[above=1]{t}{Where}
+
 \end{exe}
-\subsection{Glossed examples}
-The package automatically adjusts the vertical spacing between gloss elements and the first line to accommodate the arrows. Here’s a glossed example. In this example, because we want the arrow to point in the middle of \emph{een auto}, since it’s a phrase that has moved, we need to manually adjust the spacing between \emph{a} and \emph{car} in the gloss line. Alternatively we could just use either \emph{een} or \emph{auto} as the marked node and then no adjustment would be needed. This code also makes use of the |\extraexheight| length to increase the spacing after the second arrow in the example set.
-\clearpage
+
+\subsection{Glossed linguistic examples}
+Because of the way glossing macros work, arrows that are used in glossed examples using any of the standard linguistic glossing packages must be specially marked. We do this using the |\arrowgloss| command. This should appear before the glossed example that contains the arrow.  Here’s a glossed example. In this example, because we want the arrow to point in the middle of \emph{een auto}, since it’s a phrase that has moved, we need to manually adjust the spacing between \emph{a} and \emph{car} in the gloss line. Alternatively we could just use either \emph{een} or \emph{auto} as the marked node and then no adjustment would be needed. 
+
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
 \ex
 \begin{xlist}
-\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ex{\arrowgloss
+\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
 \ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
 \ldots that John a car yesterday.}
-\arrow{t}{een}
-\addtolength{\extraexheight}{1ex}
+\mvarrow{t}{een}
 \ex  \mkword{Where} did this move from \mkword{t}?
-\arrow[circ=1]{t}{Where}
+\mvarrow[circ=1]{t}{Where}
 \ex Another example.
 \end{xlist}
 \end{exe}
@@ -160,86 +183,130 @@ The package automatically adjusts the vertical spacing between gloss elements an
 \begin{exe}
 \ex
 \begin{xlist}
-\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ex{\arrowgloss
+\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
 \ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
 \ldots that John a car yesterday.}
-\arrow{t}{een}
-\addtolength{\extraexheight}{1ex}
+\mvarrow{t}{een}
 \ex  \mkword{Where} did this move from \mkword{t}?
-\arrow[circ=1]{t}{Where}
+\mvarrow[circ=1]{t}{Where}
 \ex Another example.
 \end{xlist}
 \end{exe}
+
 \subsection{Adding colour or changing the line style}
-The package uses TikZ styles to style the arrow and the label. The label style |circ| can be modified by using adding parameters directly.  The arrow style can be modified by using |\tikzset{arrow/.append style={...}|.  Here is some examples of both usages.
+The package uses TikZ styles to style the arrow and the label. The label style |circ| can be modified by using adding parameters directly.  The arrow style can be modified by using |\tikzset{link/.append style={...}|.  Here is some examples of both usages.
 
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
-\tikzset{arrow/.append style={{red,dashed,very thick}}}
+\tikzset{link/.append style={{red,dashed,very thick}}}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[cyan,circ=1]{t}{Where}
+\mvarrow[cyan,circ=1]{t}{Where}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 
 \begin{exe}
-\tikzset{arrow/.append style={{red,dashed,very thick}}}
+\tikzset{link/.append style={{red,dashed,very thick}}}
 \ex  \mkword[Where]{Where\textsubscript{i}} did 
 this move from \mkword[t]{t\textsubscript{i}}?
-\arrow[cyan,circ=1,thin]{t}{Where}
+\mvarrow[cyan,circ=1,thin]{t}{Where}
 \end{exe}
+
+The arrow style itself can be changed using the |\setarrowstyle| command. The default arrow style is |->|; to use the |-latex| arrow style, you can use |\setarrowstyle{-latex}|. Any arrow style defined by TikZ is a useable style.
 
 \subsection{Multiple arrows on one example}
 If we want to have more than arrow on a single example, it may make sense to have them offset from one another. The position of the labels may also need to be manually adjusted. This is quite easy to do. The length of the vertical line in the arrow is set by the length |\arrowheight|. The position of the label can be moved by adding a |xshift| value. Here’s an example:
-\clearpage
+
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved?
-\arrow[circ=1,xshift=1em]{thas}{has}
+\mvarrow[circ=1,xshift=1em]{thas}{has}
 \setlength{\arrowheight}{4.5ex}
-\arrow[circ=2]{twh}{What}
+\mvarrow[circ=2]{twh}{What}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 \begin{exe}
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved?
-\arrow[circ=1,xshift=1em]{thas}{has}
+\mvarrow[circ=1,xshift=1em]{thas}{has}
 \setlength{\arrowheight}{4.5ex}
-\arrow[circ=2]{twh}{What}
+\mvarrow[circ=2]{twh}{What}
 \end{exe}
 
 For examples like this, some manual vertical spacing may be needed to prevent subsequent lines of text from overlapping the arrow.
 
 \subsection{Arrows on top of words}
-The starred version of |\arrow|, |\arrow*| will draw the arrow above the words rather than the default position below the words. At the moment, no automatic spacing is done for arrows above, which means you will need to add vertical space yourself. I may consider adding automatic spacing here too, but at the moment this is not a priority, especially since at least in \pkg{gb4e} the |\sn| version of |\ex| will produce a blank line very simply.  Here’s the previous example using a combination of over- and under-arrows:
+The starred version of |\mvarrow|, |\mvarrow*| will draw the arrow above the words rather than the default position below the words.  Here’s the previous example using a combination of over- and under-arrows. The |\arrowstrut| command before the example add some vertical space so that the upwards arrow doesn't overlap the preceding text.
 
 \begin{quote}
 \begin{lstlisting}
 \begin{exe}
-\sn
+\arrowstrut
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
 moved? 
-\arrow[circ=1]{thas}{has} 
-\arrow*[circ=2]{twh}{What}
+\mvarrow[circ=1]{thas}{has} 
+\mvarrow*[circ=2]{twh}{What}
 \end{exe}
 \end{lstlisting}
 \end{quote}
 
 \begin{exe}
-\sn
+\arrowstrut
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
-moved? \arrow[circ=1]{thas}{has} \arrow*[circ=2]{twh}{What}
+moved? \mvarrow[circ=1]{thas}{has} \mvarrow*[circ=2]{twh}{What}
+\end{exe}
+\clearpage
+\subsection{Using with ExPex}
+The ExPex glossing macros work differently from \pkg{gb4e}, \pkg{linguex}, and \pkg{covington}, and so certain things need to be done slightly differently. Here's an example using ExPex:
+
+\begin{quote}
+\begin{lstlisting}
+\pex
+\a\arrowgloss
+\begingl[aboveglbskip=\glarrowheight]
+\gla        \ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}   gekregen heeft.//
+\glb        \ldots that John {a\hspace*{1em} car}  yesterday t  gotten has//
+\glft       \ldots that John got a car yesterday.
+\mvarrow[circ=1]{t}{een}// 
+\endgl
+\end{lstlisting}
+\end{quote}
+
+There are two important things to note here. First, in the gloss that contains the arrow you need to set  |aboveglbskip=\glarrowheight| to leave enough room for the arrow. Secondly, the |\mvarrow| command itself should appear \emph{inside} the |\glft| line rather than outside of that line, i.e., it should appear before the |//| delimiter of the line.
+
+\section{Links without arrows}
+All of the |\mvarrow| commands have an alternative version |\mvlink| which simply links the words with no arrows. 
+
+\begin{quote}
+\begin{lstlisting}
+\begin{exe}
+\arrowstrut
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? 
+\mvlink[circ=1]{thas}{has} 
+\mvlink*[circ=2]{twh}{What}
+\end{exe}
+\end{lstlisting}
+\end{quote}
+
+\begin{exe}
+\arrowstrut
+\ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? 
+\mvlink[circ=1]{thas}{has} 
+\mvlink*[circ=2]{twh}{What}
 \end{exe}
 
 
 
 \section{Version history}
-The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified. Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
+The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified. Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}. Version 2.0 changed the basic command name from |\arrow| to |\mvarrow| to avoid conflicts with other packages that define an |\arrow| command, and added the |\arrowgloss| and |\arrowstrut| macros for better spacing options. 
 \section{Acknowledgements}
 Thanks to the TeX Stackexchange community, from whom I have learned many things, especially about TikZ. The earliest version of the package used code created by user Jake in response to \href{https://tex.stackexchange.com/q/55068/}{a question} I asked. This has now be superseded by the |paths.ortho| methods, but the style described there is quite useful in and of itself. I’ve also benefitted from discussions and suggestions with user percusse. 
 
