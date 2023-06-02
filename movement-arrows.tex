@@ -21,7 +21,7 @@
 \DefineShortVerb{\|}
 \title{The \texttt{movement-arrows} package}
 \author{Alan Munn\\amunn@msu.edu}
-\date{Version 2.0\\June 2, 2023}
+\date{Version 2.1\\June 2, 2023}
   
 \lstset{%
     basicstyle=\ttfamily\small,
@@ -52,6 +52,27 @@ The |movement-arrows| package supplies simple support for drawing  arrows betwee
 }
 \end{abstract}
 
+
+\section{Package commands}
+\begin{table}[htpb]
+\centering
+\begin{tabularx}{\textwidth}{t{l}X}
+\toprule
+\bs mkword[<name>]\{<word>\} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
+\bs mvarrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs mkword}. \pkg{\bs mvarrow*} draws an arrow above the words.\\
+\bs mvlink[<options>]\{<start>\}\{<end>\} & add a link (no arrows) between start and end nodes. \pkg{\bs mvlink*} draws an link above the words. \\
+\bs varrow[<options>]\{<start>\}\{<end>\} & add a vertical arrow on the left between start and end nodes \pkg{\bs varrow*} draws an arrow to the right of the words.\\
+\bs vlink[<options>]\{<start>\}\{<end>\} & add a  vertical link (no arrows) on the left between start and end nodes. \pkg{\bs vlink*} draws an link to the right of the words. \\
+\bs setarrowstyle\{<style>\} & sets the arrow style; any regular TikZ arrow can be used.\\
+\bs arrowheight & length for the depth that the vertical line of the arrow drops/raises.\\
+\bs extraexheight & length to add more space after a line with an arrow.\\
+\bs glarrowheight & length = sum of previous two lenghts\\
+\bs arrowstrut & adds vertical space so that upwards links don't encroach on the previous line.\\
+\bs arrowgloss & tells the package that an arrow appears in a glossed example.\\
+\bottomrule
+\end{tabularx}
+\caption{Package commands}
+\end{table}
 \section{Basic usage}
 The way the package works is that you mark words in text using the |\mkword| macro and then use the |\mvarrow| or |\mvlink| macro to connect the words.  Here's a simple example:
 
@@ -66,24 +87,6 @@ The way the package works is that you mark words in text using the |\mkword| mac
 \mvarrow{t}{Where}
 \end{quote}
 
-\section{Package commands}
-\begin{table}[htpb]
-\centering
-\begin{tabularx}{\textwidth}{t{l}X}
-\toprule
-\bs mkword[<name>]\{<word>\} & marks a word or phrase for arrow placement; if \pkg{word} is a single word with no formatting, \pkg{name} will be set to \pkg{word}. If \pkg{word} is a phrase or contains formatting, a \pkg{name} must be given.\\
-\bs mvarrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs mkword}. \pkg{\bs mvarrow*} draws an arrow above the words.\\
-\bs mvlink[<options>]\{<start>\}\{<end>\} & add a link (no arrows) between start and end nodes. \pkg{\bs mvlink*} draws an link above the words. \\
-\bs setarrowstyle\{<style>\} & sets the arrow style; any regular TikZ arrow can be used.\\
-\bs arrowheight & length for the depth that the vertical line of the arrow drops/raises.\\
-\bs extraexheight & length to add more space after a line with an arrow.\\
-\bs glarrowheight & length = sum of previous two lenghts\\
-\bs arrowstrut & adds vertical space so that upwards links don't encroach on the previous line.\\
-\bs arrowgloss & tells the package that an arrow appears in a glossed example.\\
-\bottomrule
-\end{tabularx}
-\caption{Package commands}
-\end{table}
 \section{More examples}
 The way the package works is that you mark words in your example sentence using the |\mkword| macro and then use the |\mvarrow| macro to connect the words. So with the following code (using \pkg{gb4e} as our example package), we can get the result in (\ref{where}).  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
 
@@ -263,7 +266,7 @@ moved?
 \ex \mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
 moved? \mvarrow[circ=1]{thas}{has} \mvarrow*[circ=2]{twh}{What}
 \end{exe}
-\clearpage
+
 \subsection{Using with ExPex}
 The ExPex glossing macros work differently from \pkg{gb4e}, \pkg{linguex}, and \pkg{covington}, and so certain things need to be done slightly differently. Here's an example using ExPex:
 
@@ -317,7 +320,30 @@ moved?
 \mvlink[circ=1]{thas}{has} 
 \mvlink*[circ=2]{twh}{What}
 \end{exe}
+\section{Vertical links and arrows}
+Vertical versions of the arrow and link commands are available with the command names |\varrow| and |\vlink| respectively. A vertical link appears to the left of the nodes; the starred versions of the commands appears to the right of the nodes. No spacing adjustment is made for the links; it's up to you to add appropriate space to include the arrows.  Here's an example. The |\arrowlength| can be passed to an |\hspace| command to adjust allow room for the arrow.
 
+\begin{quote}
+\begin{lstlisting}
+\begin{tabular}{>{\hspace{\arrowheight}}lr}
+\mkword[1]{Line} & 1\\
+Line & \mkword{2}\\
+Line & \mkword{3}\\
+\mkword[4]{Line} & 4
+\end{tabular}
+\varrow{1}{4}
+\vlink*{2}{3}
+\end{lstlisting}
+\end{quote}
+
+\begin{tabular}{>{\hspace{\arrowheight}}lr}
+\mkword[1]{Line} & 1\\
+Line & \mkword{2}\\
+Line & \mkword{3}\\
+\mkword[4]{Line} & 4
+\end{tabular}
+\varrow{1}{4}
+\vlink*{2}{3}
 
 
 \section{Version history}

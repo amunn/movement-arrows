@@ -20,6 +20,7 @@
 % Version 2.0 2023-06-01 added \arrowgloss to fix strut problem
 %						 made package more general, added \mvlink command, new styles
 %					     renamed arrow command to be \mvarrow
+% Version 2.1 2023-06-02 Added vertical links
 %
 %
 %
@@ -72,6 +73,7 @@
 \newcommand*\arrowgloss{\setlength{\MVA@arrowht}{\arrowheight}\setlength{\MVA@extraht}{\extraexheight}\global\MVA@arrowglosstrue}
 \newcommand*\arrowstrut{\vspace*{\MVA@arrowstrutheight}}
 
+% Horizontal arrows \mvarrow = below \mvarrow* = above
 \NewDocumentCommand{\mvarrow}{somm}{%
 \ifMVA@arrowgloss\else\arrowstrut\fi
 \IfBooleanTF{#1}%
@@ -116,7 +118,51 @@
 \setlength{\MVA@arrowht}{0ex}
 \setlength{\MVA@extraht}{0ex}
 }
+% Vertical arrows/link \varrow = left \varrow* = right
+\NewDocumentCommand{\varrow}{somm}{%
+\IfBooleanTF{#1}%
+{\setlength{\MVA@arrowht}{\arrowheight}
+ \setlength{\MVA@extraht}{\extraexheight}
+\def\MVA@rightanchor{east}\let\MVA@leftanchor\MVA@rightanchor}
+{\setlength{\MVA@arrowht}{-\arrowheight}
+\setlength{\MVA@extraht}{-\extraexheight}
+\def\MVA@rightanchor{west}\let\MVA@leftanchor\MVA@rightanchor}
+\IfNoValueTF{#2}
+{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[link=\MVA@arrowstyle] (#3.\MVA@rightanchor) -|- [ distance=\MVA@arrowht] (#4.\MVA@leftanchor);
+\end{tikzpicture}
+}
+{\begin{tikzpicture}[remember picture,overlay]
+\draw[link=\MVA@arrowstyle] (#3.\MVA@rightanchor)  -|- [ distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\end{tikzpicture}}
+\global\MVA@arrowglossfalse%
+\setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
+}
+\NewDocumentCommand{\vlink}{somm}{%
+\IfBooleanTF{#1}%
+{\setlength{\MVA@arrowht}{\arrowheight}
+ \setlength{\MVA@extraht}{\extraexheight}
+\def\MVA@rightanchor{east}\let\MVA@leftanchor\MVA@rightanchor}
+{\setlength{\MVA@arrowht}{-\arrowheight}
+\setlength{\MVA@extraht}{-\extraexheight}
+\def\MVA@rightanchor{west}\let\MVA@leftanchor\MVA@rightanchor}
+\IfNoValueTF{#2}
+{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[link] (#3.\MVA@rightanchor) -|-[distance=\MVA@arrowht] (#4.\MVA@leftanchor);
+\end{tikzpicture}
+}
+{\begin{tikzpicture}[remember picture,overlay]
+\draw[link] (#3.\MVA@rightanchor)  -|-[ distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\end{tikzpicture}}
+\global\MVA@arrowglossfalse%
+\setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
+}
 \AtBeginDocument{%
 \ifdefined\eachwordone\preto{\eachwordone}{\MVA@arrowstrut}
 \fi}
+\endinput
 
