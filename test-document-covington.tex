@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[margin=2in]{geometry}
+\usepackage{covington}
+\usepackage{movement-arrows}
+
+\begin{document}
+This is some text.
+\begin{subexamples}
+	\item\arrowgloss\digloss
+	    {\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.}
+	    {\ldots that John {a \hspace*{1em} car}  yesterday t gotten has}
+	    {\ldots that John a car yesterday.\mvarrow{t}{een}}	    
+	\item \mkword{Where} did this move from \mkword{t}?
+	    \mvarrow[circ=1]{t}{Where}
+	\item Another example.
+		\item\digloss
+	    {\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.}
+	    {\ldots that John {a \hspace*{1em} car}  yesterday t gotten has}
+	    {\ldots that John a car yesterday.}
+	\item Another example.
+\end{subexamples}
+
+\begin{subexamples}
+\item This \mkword{is} not \mkword[t]{<be>} verb movement.
+\mvarrow{t}{is}
+\item It  \mkword{PRES} not \mkword[be]{be} verb lowering.
+\mvarrow[circ=2]{PRES}{be}\arrowstrut
+\end{subexamples}
+\begin{subexamples}
+\item
+\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? 
+\mvarrow[circ=1]{thas}{has} 
+\mvarrow*[circ=2]{twh}{What}
+\item\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>}
+moved? \mvarrow[circ=1]{thas}{has} \mvarrow*[circ=2]{twh}{What}
+\end{subexamples}
+
+\end{document}

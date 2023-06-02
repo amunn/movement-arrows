@@ -1,38 +1,49 @@
-\documentclass[11pt]{article}
+% !TEX TS-program = pdfLaTeX
 
+\documentclass{article}
+\usepackage[margin=2in]{geometry}
+\usepackage[T1]{fontenc}
 \usepackage{gb4e}
 \usepackage{movement-arrows}
 \begin{document}
+\section*{\texttt{gb4e} test document}
 \begin{exe}
-\ex\label{scramble-det}
+\ex
 \begin{xlist}
-        \ex 
-        \gll 
-        \ldots dat Jan \tikzmark{een} auto gisteren \tikzmark{t}  gekregen heeft. This is some more lines \\
-        \ldots that John a car  yesterday t gotten has this is some more lines \\
-        \ldots that John a car yesterday.
-        \arrow{t}{een}
-        \ex Another \tikzmark{example} with \tikzmark{movement}.
-        \arrow{movement}{example}
-        \ex Another example.
+\ex{\arrowgloss\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
+\glt that John a car yesterday.}
+\mvarrow{t}{een}
+\ex  \mkword{Where} did this move from \mkword{t}?
+\mvarrow[circ=1]{t}{Where}
+\ex{\gll\ldots dat Jan \mkword[een]{een auto} gisteren \mkword{t}  gekregen heeft.\\
+\ldots that John {a \hspace*{1em} car}  yesterday t gotten has \\
+\glt that John a car yesterday.}
+\ex Another example.
 \end{xlist}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
-\ex This \tikzmark{is} verb movement \tikzmark{example}
-\arrow{example}{is}
 \end{exe}
 
 \begin{exe}
-\ex{
-    \gll%
-    \tikzmark{John}-wa totetumonaiukurai dousiyoumonai \tikzmark{tondemonai} \tikzmark{sukuigatai}  \tikzmark{t} baka-da.    \\
-     John-Top very very very very {} stupid-cop \\
-     \arrow[arrow dir=lbar]{tondemonai}{John}
-     \arrow[arrow dir=rbar]{t}{sukuigatai}
-     \glt `John is very stupid.' 
-}
+\ex
+\begin{xlist}
+\ex This \mkword{is} not \mkword[t]{<be>} verb movement.
+\mvarrow{t}{is}
+\ex It  \mkword{PRES} not \mkword[be]{be} verb lowering.
+\mvarrow[circ=2]{PRES}{be}
+\ex Another example.
+\end{xlist}
+\end{exe}
 
-
+\begin{exe}
+\ex
+\begin{xlist}
+\arrowstrut
+\ex\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved? 
+\mvarrow*[circ=2]{twh}{What}
+\mvarrow[circ=1]{thas}{has} 
+\ex\mkword{What} \mkword{has} \mkword[twh]{<what>} \mkword[thas]{<has>} moved? \mvarrow[circ=1]{thas}{has} 
+\mvarrow*[circ=2]{twh}{What}
+\end{xlist}
 \end{exe}
 
 \end{document}
