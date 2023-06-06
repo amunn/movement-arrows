@@ -48,7 +48,7 @@
 },
     link/.style={#1,shorten >=3pt,shorten <=3pt},
     above/.style = {label=above:#1},
-    below/.style = {label=below:#1}
+    below/.style = {label=below:#1},
 }
 \newlength{\arrowheight}
 \newlength{\MVA@arrowstrutheight}
@@ -73,6 +73,7 @@
 \newcommand*\arrowgloss{\setlength{\MVA@arrowht}{\arrowheight}\setlength{\MVA@extraht}{\extraexheight}\global\MVA@arrowglosstrue}
 \newcommand*\arrowstrut{\vspace*{\MVA@arrowstrutheight}}
 
+
 % Horizontal arrows \mvarrow = below \mvarrow* = above
 \NewDocumentCommand{\mvarrow}{somm}{%
 \ifMVA@arrowgloss\else\arrowstrut\fi
@@ -90,7 +91,7 @@
 \end{tikzpicture}
 }
 {\begin{tikzpicture}[remember picture,overlay]
-\draw[link=\MVA@arrowstyle] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\draw[link] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
 \end{tikzpicture}}
 \global\MVA@arrowglossfalse%
 \setlength{\MVA@arrowht}{0ex}

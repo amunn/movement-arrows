@@ -62,7 +62,7 @@ The |movement-arrows| package supplies simple support for drawing  arrows betwee
 \bs mvarrow[<options>]\{<start>\}\{<end>\} & add an arrow between start and end nodes defined with \pkg{\bs mkword}. \pkg{\bs mvarrow*} draws an arrow above the words.\\
 \bs mvlink[<options>]\{<start>\}\{<end>\} & add a link (no arrows) between start and end nodes. \pkg{\bs mvlink*} draws an link above the words. \\
 \bs varrow[<options>]\{<start>\}\{<end>\} & add a vertical arrow on the left between start and end nodes \pkg{\bs varrow*} draws an arrow to the right of the words.\\
-\bs vlink[<options>]\{<start>\}\{<end>\} & add a  vertical link (no arrows) on the left between start and end nodes. \pkg{\bs vlink*} draws an link to the right of the words. \\
+\bs vlink[<options>]\{<start>\}\{<end>\} & add a  vertical link (no arrows) on the left between start and end nodes. \pkg{\bs vlink*} draws a link to the right of the words. \\
 \bs setarrowstyle\{<style>\} & sets the arrow style; any regular TikZ arrow can be used.\\
 \bs arrowheight & length for the depth that the vertical line of the arrow drops/raises.\\
 \bs extraexheight & length to add more space after a line with an arrow.\\
@@ -74,7 +74,7 @@ The |movement-arrows| package supplies simple support for drawing  arrows betwee
 \caption{Package commands}
 \end{table}
 \section{Basic usage}
-The way the package works is that you mark words in text using the |\mkword| macro and then use the |\mvarrow| or |\mvlink| macro to connect the words.  Here's a simple example:
+The way the package works is that you mark words in text using the |\mkword| macro and then use the |\mvarrow| or |\mvlink| macro to connect the words. So with the following code, we can get the following result.  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
 
 \begin{quote}
 \begin{lstlisting}
@@ -88,25 +88,8 @@ The way the package works is that you mark words in text using the |\mkword| mac
 \end{quote}
 
 \section{More examples}
-The way the package works is that you mark words in your example sentence using the |\mkword| macro and then use the |\mvarrow| macro to connect the words. So with the following code (using \pkg{gb4e} as our example package), we can get the result in (\ref{where}).  Note that you must compile the document twice to place the arrow correctly, because the package uses the TikZ |[remember picture]| function.
 
-
-\begin{quote}
-\begin{lstlisting}
-\begin{exe}
-\ex  \mkword{Where} did this move from \mkword{t}?
-\mvarrow{t}{Where}
-\end{exe}
-\end{lstlisting}
-\end{quote}
-
-\begin{exe}
-\ex  \mkword{Where} did this move from \mkword{t}?
-\mvarrow{t}{Where}
-\label{where}
-\end{exe}
-
-This is the simplest use of the |\mkword| macro: it automatically creates a node with the same name as the word.  This only works, however, if the word is a single word with no other formatting. 
+The example above is the simplest use of the |\mkword| macro: it automatically creates a node with the same name as the word.  This only works, however, if the word is a single word with no other formatting. 
 
 For example, if instead of representing traces with \emph{t} we use copies or a subscripted trace, we need to explicitly state the node name in the optional argument of |\mkword|.  Here’s a revised example:
 \begin{quote}
@@ -120,7 +103,8 @@ this move from \mkword[t]{t\textsubscript{i}}?
 \end{quote}
 
 \begin{exe}
-\ex  \mkword[Where]{Where\textsubscript{i}} did this move from \mkword[t]{t\textsubscript{i}}?
+\ex  
+\mkword[Where]{Where\textsubscript{i}} did this move from \mkword[t]{t\textsubscript{i}}?
 \mvarrow{t}{Where}
 \label{where2}
 \end{exe}
