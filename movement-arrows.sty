@@ -20,6 +20,7 @@
 % Version 2.0 2023-06-01 added \arrowgloss to fix strut problem
 %						 made package more general, added \mvlink command, new styles
 %					     renamed arrow command to be \mvarrow
+% Version 2.1 2023-10-29 added \cvarrow to allow curved arrow connections
 %
 %
 %
@@ -49,6 +50,37 @@
     above/.style = {label=above:#1},
     below/.style = {label=below:#1}
 }
+\tikzset{
+  % code from https://tex.stackexchange.com/q/699883/2693
+  % If this gets included into the paths.ext library it will be removed
+  % “execute at begin to” can't be used inside “to[bend north]”
+  % which is why we do this simply at the start of “to path”
+  auto bend/north/.code={{{%
+    \pgf@process{%
+      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
+                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
+    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x<0pt right\else left\fi/.@cmd}#1\pgfeov}}},
+  auto bend/south/.code={{{%
+    \pgf@process{%
+      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
+                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
+    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x<0pt left\else right\fi/.@cmd}#1\pgfeov}}},
+  auto bend/west/.code={{{%
+    \pgf@process{%
+      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
+                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
+    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y<0pt right\else left\fi/.@cmd}#1\pgfeov}}},
+  auto bend/east/.code={{{%
+    \pgf@process{%
+      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
+                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
+    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y<0pt left\else right\fi/.@cmd}#1\pgfeov}}},
+  /utils/temp/.style={
+    bend #1/.style={
+      to path={% this should be faster than “[auto bend/#1={##1}]”
+        \pgfextra{\pgfkeysvalueof{/tikz/auto bend/#1/.@cmd}##1\pgfeov}
+        \tikz@to@curve@path}}},
+  /utils/temp/.list={north, south, west, east}}
 \newlength{\arrowheight}
 \newlength{\MVA@arrowstrutheight}
 \setlength{\MVA@arrowstrutheight}{3ex}
@@ -61,8 +93,12 @@
 \newlength{\MVA@extraht}
 \setlength{\MVA@arrowht}{0ex}
 \setlength{\MVA@extraht}{0ex}
-\newcommand*\MVA@arrowstyle{->}
+\newcommand*\setbendheight[1]{\gdef\MVA@bendht{#1}}
+\setbendheight{20}
+\newcommand*\setbendheightfactor[1]{\gdef\MVA@curvehtfactor{#1}}
+\setbendheightfactor{.25}
 \newcommand*\setarrowstyle[1]{\gdef\MVA@arrowstyle{#1}}
+\setarrowstyle{->}
 \newif\ifMVA@arrowgloss
 \newlength{\MVA@strutheight}
 \newcommand*\MVA@arrowstrut{%
@@ -111,6 +147,32 @@
 }
 {\begin{tikzpicture}[remember picture,overlay]
 \draw[link] (#3.\MVA@rightanchor)  r-du[du distance=\MVA@arrowht] node[#2] {}  (#4.\MVA@leftanchor);
+\end{tikzpicture}}
+\global\MVA@arrowglossfalse%
+\setlength{\MVA@arrowht}{0ex}
+\setlength{\MVA@extraht}{0ex}
+}
+% Curved arrows
+\NewDocumentCommand{\cvarrow}{somm}{%
+\ifMVA@arrowgloss\else\arrowstrut\fi
+\IfBooleanTF{#1}%
+{\setlength{\MVA@arrowht}{-\MVA@curvehtfactor\arrowheight}
+ \setlength{\MVA@extraht}{-\extraexheight}
+\def\MVA@rightanchor{north}\let\MVA@leftanchor\MVA@rightanchor
+\def\MVA@bend{north}
+}
+{\setlength{\MVA@arrowht}{\MVA@curvehtfactor\arrowheight}
+\setlength{\MVA@extraht}{\extraexheight}
+\def\MVA@rightanchor{south}\let\MVA@leftanchor\MVA@rightanchor
+\def\MVA@bend{south}}
+\IfNoValueTF{#2}
+{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)-(0,\MVA@arrowht)$) to [bend \MVA@bend=\MVA@bendht] ($(#4.\MVA@leftanchor)-(0,\MVA@arrowht)$);
+\end{tikzpicture}
+}
+{\begin{tikzpicture}[remember picture,overlay]
+\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)+(0,\MVA@arrowht)$) to[bend \MVA@bend=\MVA@bendht] node[#2] {}  ($(#4.\MVA@leftanchor)+(0,\MVA@arrowht)$);
 \end{tikzpicture}}
 \global\MVA@arrowglossfalse%
 \setlength{\MVA@arrowht}{0ex}
