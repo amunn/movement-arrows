@@ -50,37 +50,120 @@
     above/.style = {label=above:#1},
     below/.style = {label=below:#1}
 }
-\tikzset{
+
   % code from https://tex.stackexchange.com/q/699883/2693
   % If this gets included into the paths.ext library it will be removed
   % “execute at begin to” can't be used inside “to[bend north]”
   % which is why we do this simply at the start of “to path”
-  auto bend/north/.code={{{%
-    \pgf@process{%
-      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
-                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
-    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x<0pt right\else left\fi/.@cmd}#1\pgfeov}}},
-  auto bend/south/.code={{{%
-    \pgf@process{%
-      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
-                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
-    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x<0pt left\else right\fi/.@cmd}#1\pgfeov}}},
-  auto bend/west/.code={{{%
-    \pgf@process{%
-      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
-                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
-    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y<0pt right\else left\fi/.@cmd}#1\pgfeov}}},
-  auto bend/east/.code={{{%
-    \pgf@process{%
-      \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}
-                   {\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}}%
-    \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y<0pt left\else right\fi/.@cmd}#1\pgfeov}}},
-  /utils/temp/.style={
-    bend #1/.style={
-      to path={% this should be faster than “[auto bend/#1={##1}]”
-        \pgfextra{\pgfkeysvalueof{/tikz/auto bend/#1/.@cmd}##1\pgfeov}
-        \tikz@to@curve@path}}},
-  /utils/temp/.list={north, south, west, east}}
+% Copyright 2023 by Qrrbrbirlbel
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Free Documentation License.
+%
+\tikzset{
+  autobend north/.default=\tikz@to@bend,
+  autobend south/.default=\tikz@to@bend,
+  autobend west/.default=\tikz@to@bend,
+  autobend east/.default=\tikz@to@bend,
+  autobend up/.default=\tikz@to@bend,
+  autobend down/.default=\tikz@to@bend,
+  autobend left/.default=\tikz@to@bend,
+  autobend right/.default=\tikz@to@bend,
+  autobend north/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+          \pgf@pos@transform@glob
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x>0pt right\else left\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend south/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+          \pgf@pos@transform@glob
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x>0pt left\else right\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend west/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+          \pgf@pos@transform@glob
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y>0pt right\else left\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend east/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+          \pgf@pos@transform@glob
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y>0pt left\else right\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend up/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x>0pt right\else left\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend down/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@x>0pt left\else right\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend left/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y>0pt right\else left\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  },
+  autobend right/.style={
+    to path={
+      \pgfextra{%
+        \pgf@process{%
+          \pgfpointdiff{\tikz@scan@one@point\pgfutil@firstofone(\tikztotarget)}
+                       {\tikz@scan@one@point\pgfutil@firstofone(\tikztostart)}%
+        }%
+        \pgfkeysvalueof{/tikz/bend \ifdim\pgf@y>0pt left\else right\fi/.@cmd}#1\pgfeov}
+      \tikz@to@curve@path
+    }%
+  }%
+}
 \newlength{\arrowheight}
 \newlength{\MVA@arrowstrutheight}
 \setlength{\MVA@arrowstrutheight}{3ex}
@@ -93,9 +176,9 @@
 \newlength{\MVA@extraht}
 \setlength{\MVA@arrowht}{0ex}
 \setlength{\MVA@extraht}{0ex}
-\newcommand*\setbendheight[1]{\gdef\MVA@bendht{#1}}
-\setbendheight{20}
-\newcommand*\setbendheightfactor[1]{\gdef\MVA@curvehtfactor{#1}}
+\newcommand*\setbendangle[1]{\gdef\MVA@bendangle{#1}}
+\setbendangle{20}
+\newcommand*\setbendheightfactor[1]{\gdef\MVA@bendhtfactor{#1}}
 \setbendheightfactor{.25}
 \newcommand*\setarrowstyle[1]{\gdef\MVA@arrowstyle{#1}}
 \setarrowstyle{->}
@@ -156,23 +239,23 @@
 \NewDocumentCommand{\cvarrow}{somm}{%
 \ifMVA@arrowgloss\else\arrowstrut\fi
 \IfBooleanTF{#1}%
-{\setlength{\MVA@arrowht}{-\MVA@curvehtfactor\arrowheight}
+{\setlength{\MVA@arrowht}{-\MVA@bendhtfactor\arrowheight}
  \setlength{\MVA@extraht}{-\extraexheight}
 \def\MVA@rightanchor{north}\let\MVA@leftanchor\MVA@rightanchor
 \def\MVA@bend{north}
 }
-{\setlength{\MVA@arrowht}{\MVA@curvehtfactor\arrowheight}
+{\setlength{\MVA@arrowht}{\MVA@bendhtfactor\arrowheight}
 \setlength{\MVA@extraht}{\extraexheight}
 \def\MVA@rightanchor{south}\let\MVA@leftanchor\MVA@rightanchor
 \def\MVA@bend{south}}
 \IfNoValueTF{#2}
 {%
 \begin{tikzpicture}[remember picture,overlay]
-\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)-(0,\MVA@arrowht)$) to [bend \MVA@bend=\MVA@bendht] ($(#4.\MVA@leftanchor)-(0,\MVA@arrowht)$);
+\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)-(0,\MVA@arrowht)$) to [autobend \MVA@bend=\MVA@bendht] ($(#4.\MVA@leftanchor)-(0,\MVA@arrowht)$);
 \end{tikzpicture}
 }
 {\begin{tikzpicture}[remember picture,overlay]
-\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)+(0,\MVA@arrowht)$) to[bend \MVA@bend=\MVA@bendht] node[#2] {}  ($(#4.\MVA@leftanchor)+(0,\MVA@arrowht)$);
+\draw[link=\MVA@arrowstyle] ($(#3.\MVA@rightanchor)+(0,\MVA@arrowht)$) to[autobend \MVA@bend=\MVA@bendht] node[#2] {}  ($(#4.\MVA@leftanchor)+(0,\MVA@arrowht)$);
 \end{tikzpicture}}
 \global\MVA@arrowglossfalse%
 \setlength{\MVA@arrowht}{0ex}

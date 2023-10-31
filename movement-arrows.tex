@@ -21,7 +21,7 @@
 \DefineShortVerb{\|}
 \title{The \texttt{movement-arrows} package}
 \author{Alan Munn\\amunn@msu.edu}
-\date{Version 2.0\\June 2, 2023}
+\date{Version 2.1\\October 29, 2023}
   
 \lstset{%
     basicstyle=\ttfamily\small,
@@ -321,7 +321,7 @@ moved?
 
 
 \section{Version history}
-The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified and allowed version 1.0 to be released in May 2023, a little too fast. Version 2.0 changed the basic command name from |\arrow| to |\mvarrow| to avoid conflicts with other packages that define an |\arrow| command, and added the |\arrowgloss| and |\arrowstrut| macros for better spacing options.  Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
+The first version of this package was written in 2017, but never released publicly. The use of the \pkg{tikz-extra} package |paths.ortho| allowed for the current code to be massively simplified and allowed version 1.0 to be released in May 2023, a little too fast. Version 2.0 changed the basic command name from |\arrow| to |\mvarrow| to avoid conflicts with other packages that define an |\arrow| command, and added the |\arrowgloss| and |\arrowstrut| macros for better spacing options. Version 2.1 added a curved arrow option, and includes more code contributed by Qrrbrbirlbel, the author of \pkg{tikz-extra} in response to my \href{https://tex.stackexchange.com/q/699883/}{question} on TeX.se. The addition of curved arrows allows the package to be used for drawing arrows on tree diagrams as well.  Bug reports and feature requests are welcome at the \href{https://github.com/amunn/movement-arrows/issues}{GitHub bug tracker}.
 \section{Acknowledgements}
 Thanks to the TeX Stackexchange community, from whom I have learned many things, especially about TikZ. The earliest version of the package used code created by user Jake in response to \href{https://tex.stackexchange.com/q/55068/}{a question} I asked. This has now be superseded by the |paths.ortho| methods, but the style described there is quite useful in and of itself. I’ve also benefitted from discussions and suggestions with user percusse. 
 
