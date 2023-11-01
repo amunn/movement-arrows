@@ -62,6 +62,10 @@
 % 1. under the LaTeX Project Public License and/or
 % 2. under the GNU Free Documentation License.
 %
+\IfFileExists{tikzlibraryext.topaths.autobend.code.tex}
+    \@firstoftwo\@secondoftwo
+	{\usetikzlibrary{ext.topaths.autobend}}
+	{
 \tikzset{
   autobend north/.default=\tikz@to@bend,
   autobend south/.default=\tikz@to@bend,
@@ -163,6 +167,7 @@
       \tikz@to@curve@path
     }%
   }%
+}
 }
 \newlength{\arrowheight}
 \newlength{\MVA@arrowstrutheight}
